@@ -1,0 +1,39 @@
+<apex:page standardController="Curso__c" extensions="CursoReportController" renderAs="pdf">
+
+    <div style="text-align: right;">
+        <apex:image url="{!URLFOR($Resource.LogoFundacionEspartanos)}" style="width: 100px; height: auto;"/>
+    </div>
+    
+    <h1>Reporte del Curso: {!curso.Name}</h1>
+    
+    <p><strong>Área:</strong> {!curso.Curso_Area__c}</p>
+    <p><strong>Descripción:</strong> <apex:outputField value="{!curso.Descripcion__c}"/></p>
+    <p><strong>Organización que la dicta:</strong> {!curso.Organizaci_n_que_lo_dicta__r.Name}</p>
+    <p><strong>Cupo de Participantes:</strong> {!curso.Cupo_de_Participantes__c}</p>
+    <p><strong>Cantidad de Clases:</strong> {!curso.Cupo_de_Participantes__c}</p>
+    <p><strong>Día de Cursada:</strong> {!curso.D_a_de_cursada__c}</p>
+    <p><strong>Fecha de Inicio</strong> <apex:outputText value=": {!curso.Fecha_de_Inicio__c}" /></p>
+    <p><strong>Fecha de Fin</strong> <apex:outputText value=": {!curso.Fecha_de_Fin__c}" /></p>
+    <p><strong>Estado:</strong> {!curso.Estado__c}</p>
+
+    <h2>Inscriptos al Curso</h2>
+    <table border="1">
+        <tr>
+            <th>Nombre</th>
+            <th>Estado de Inscripción</th>
+            <th>Porcentaje de Asistencia</th>
+            <th>Pabellón</th>
+        </tr>
+        <apex:repeat value="{!inscripciones}" var="inscripcion">
+            <tr>
+                <td>{!inscripcion.Espartano__r.Name}</td>
+                <td>{!inscripcion.Estado_final__c}</td>
+                <td>
+                    <apex:outputText value="-" rendered="{!NOT(OR(inscripcion.Estado_final__c == 'Egresó', inscripcion.Estado_final__c == 'Cursando'))}"/>
+                    <apex:outputText value="{!inscripcion.Porcentaje_de_Asistencia__c}%" rendered="{!OR(inscripcion.Estado_final__c == 'Egresó', inscripcion.Estado_final__c == 'Cursando')}"/>
+                </td>
+                <td>{!inscripcion.Espartano__r.Pabell_n__r.Name}</td>
+            </tr>
+        </apex:repeat>
+    </table>
+</apex:page>
